@@ -1,4 +1,4 @@
-import type { ContentField } from '../lib/types';
+import type { ContentField } from "../lib/types";
 
 const DANGEROUS_URL = /^\s*(javascript|data|vbscript)\s*:/i;
 
@@ -14,33 +14,30 @@ interface EditableFieldProps {
 export default function EditableField({ field, onChange }: EditableFieldProps) {
   const isChanged = field.value !== field.originalValue;
   const isUrl =
-    field.property === 'href' ||
-    field.property === 'src' ||
-    field.property === 'srcset';
+    field.property === "href" ||
+    field.property === "src" ||
+    field.property === "srcset";
   const isLongText =
-    field.property === 'textContent' && field.originalValue.length > 80;
+    field.property === "textContent" && field.originalValue.length > 80;
   const hasDangerousUrl = isUrl && !isSafeUrl(field.value);
 
   const inputClasses = [
-    'w-full rounded-lg border bg-white px-3 py-2 text-sm text-gray-900',
-    'placeholder:text-gray-400',
-    'focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/20',
-    'transition duration-150',
+    "w-full rounded-lg border bg-white px-3 py-2 text-sm text-gray-900",
+    "placeholder:text-gray-400",
+    "focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/20",
+    "transition duration-150",
     hasDangerousUrl
-      ? 'border-red-400 bg-red-50/30'
+      ? "border-red-400 bg-red-50/30"
       : isChanged
-        ? 'border-amber-300 bg-amber-50/30'
-        : 'border-gray-300',
-    isUrl ? 'font-mono text-xs' : '',
-  ].join(' ');
+        ? "border-amber-300 bg-amber-50/30"
+        : "border-gray-300",
+    isUrl ? "font-mono text-xs" : "",
+  ].join(" ");
 
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
-        <label
-          htmlFor={field.id}
-          className="text-xs font-medium text-gray-500"
-        >
+        <label htmlFor={field.id} className="text-xs font-medium text-gray-500">
           {field.label}
         </label>
         {isChanged && (
@@ -70,12 +67,12 @@ export default function EditableField({ field, onChange }: EditableFieldProps) {
           rows={3}
           spellCheck={isUrl ? false : undefined}
           autoComplete="off"
-          className={inputClasses + ' resize-y'}
+          className={inputClasses + " resize-y"}
         />
       ) : (
         <input
           id={field.id}
-          type={isUrl ? 'url' : 'text'}
+          type={isUrl ? "url" : "text"}
           value={field.value}
           onChange={(e) => onChange(field.id, e.target.value)}
           spellCheck={isUrl ? false : undefined}
@@ -90,7 +87,7 @@ export default function EditableField({ field, onChange }: EditableFieldProps) {
         </p>
       )}
 
-      {(field.property === 'src' || field.property === 'srcset') &&
+      {(field.property === "src" || field.property === "srcset") &&
         field.value &&
         isSafeUrl(field.value) && (
           <img
@@ -99,7 +96,7 @@ export default function EditableField({ field, onChange }: EditableFieldProps) {
             className="mt-1 h-12 w-auto rounded border border-gray-200 object-contain"
             loading="lazy"
             onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
+              (e.target as HTMLImageElement).style.display = "none";
             }}
           />
         )}

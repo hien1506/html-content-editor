@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import type { FieldGroup as FieldGroupType } from '../lib/types';
-import EditableField from './EditableField';
+import { useState } from "react";
+import type { FieldGroup as FieldGroupType } from "../lib/types";
+import EditableField from "./EditableField";
 
 interface FieldGroupProps {
   group: FieldGroupType;
@@ -37,7 +37,7 @@ export default function FieldGroup({
           strokeLinecap="round"
           strokeLinejoin="round"
           className={`shrink-0 text-gray-400 transition-transform duration-200 ease-out ${
-            expanded ? 'rotate-90' : ''
+            expanded ? "rotate-90" : ""
           }`}
           aria-hidden="true"
         >
@@ -49,10 +49,11 @@ export default function FieldGroup({
             {group.label}
           </h3>
           <p className="text-xs text-gray-500">
-            {group.fields.length} field{group.fields.length !== 1 ? 's' : ''}
+            {group.fields.length} field{group.fields.length !== 1 ? "s" : ""}
             {changedCount > 0 && (
               <span className="text-amber-600">
-                {' '}&middot; {changedCount} changed
+                {" "}
+                &middot; {changedCount} changed
               </span>
             )}
           </p>
@@ -65,11 +66,7 @@ export default function FieldGroup({
           className="space-y-4 border-t border-gray-100 px-4 py-4 animate-fade-in"
         >
           {group.fields.map((field) => (
-            <EditableField
-              key={field.id}
-              field={field}
-              onChange={onChange}
-            />
+            <EditableField key={field.id} field={field} onChange={onChange} />
           ))}
         </div>
       )}

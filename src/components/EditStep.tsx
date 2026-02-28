@@ -69,7 +69,7 @@ export default function EditStep({
             type="button"
             onClick={handleStartOver}
             aria-label="Start Over"
-            className={`rounded-lg border px-3 py-2 text-sm font-medium transition duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97] ${
+            className={`rounded-full border px-3 py-2 text-sm font-medium transition duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97] ${
               confirmingStartOver
                 ? "border-red-300 bg-red-50 text-red-700 hover:bg-red-100"
                 : "border-gray-300 bg-white text-black hover:bg-gray-50"
@@ -104,7 +104,7 @@ export default function EditStep({
           <button
             type="button"
             onClick={onExport}
-            className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition duration-150 hover:bg-accent-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97]"
+            className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-white transition duration-150 hover:bg-accent-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 active:scale-[0.97]"
           >
             <svg
               width="16"
