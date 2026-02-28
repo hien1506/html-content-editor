@@ -24,17 +24,17 @@ export default function PasteStep({ onParse, error }: PasteStepProps) {
 
   return (
     <div className="flex min-h-screen justify-center px-4 py-8 animate-fade-in">
-      <div className="w-full max-w-4xl ">
-        <div className="mb-16">
+      <div className="w-full max-w-4xl">
+        <div className="flex flex-col gap-4 mb-24">
           <h1
-            className="text-md font-mono font-bold tracking-tight text-gray-900"
+            className="text-xl font-mono font-bold tracking-tight text-gray-900"
             style={{ textWrap: "balance" }}
           >
             HTML CONTENT EDITOR
           </h1>
-          <ol className="mt-4 font-mono inline-block text-left text-sm text-gray-500 space-y-1 list-decimal list-inside">
-            <li>Paste your HTML below</li>
-            <li>Edit the extracted text, links, &amp; images</li>
+          <ol className="font-mono inline-block text-left text-sm text-gray-700 space-y-1 list-decimal list-inside">
+            <li>Paste HTML below</li>
+            <li>Edit the parsed text, links, &amp; images</li>
             <li>Format &amp; copy the updated HTML back</li>
           </ol>
         </div>
@@ -55,7 +55,7 @@ export default function PasteStep({ onParse, error }: PasteStepProps) {
           spellCheck={false}
           autoComplete="off"
           rows={14}
-          className="w-full resize-y rounded-xl border border-gray-200 bg-white px-4 py-3 font-mono text-sm text-gray-900 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] placeholder:text-gray-400 focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/20"
+          className="w-full resize-y rounded-xl border border-gray-300 bg-white px-4 py-3 font-mono text-sm text-gray-900 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] placeholder:text-gray-400 focus-visible:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/20"
         />
 
         {error && (
@@ -68,7 +68,7 @@ export default function PasteStep({ onParse, error }: PasteStepProps) {
         )}
 
         <div className="mt-4 flex items-center justify-end gap-3">
-          <kbd className="hidden text-xs text-gray-400 sm:inline">
+          <kbd className="hidden text-xs text-gray-500 sm:inline">
             {isMac ? "\u2318" : "Ctrl"}
             {isMac ? "" : "+"}
             <span className="mx-1">Enter</span>
