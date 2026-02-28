@@ -20,3 +20,9 @@ export interface ParseResult {
   groups: FieldGroup[];
   isFullDocument: boolean;
 }
+
+export interface SavedSession {
+  originalHtml: string;
+  fieldValues: Record<string, string>;
+  timestamp: number;
+}
