@@ -2,7 +2,7 @@ export interface ContentField {
   id: string;
   elementId: number;
   tag: string;
-  property: 'textContent' | 'href' | 'src' | 'srcset' | 'alt';
+  property: 'textContent' | 'href' | 'src' | 'srcset' | 'alt' | 'title';
   label: string;
   originalValue: string;
   value: string;

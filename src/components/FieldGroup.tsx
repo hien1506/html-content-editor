@@ -1,6 +1,23 @@
-import { useState } from "react";
-import type { FieldGroup as FieldGroupType } from "../lib/types";
+import { useState, useMemo } from "react";
+import type { FieldGroup as FieldGroupType, ContentField } from "../lib/types";
 import EditableField from "./EditableField";
+import ImageFieldGroup from "./ImageFieldGroup";
+import LinkFieldGroup from "./LinkFieldGroup";
+
+type RenderItem =
+  | { kind: "field"; field: ContentField }
+  | {
+      kind: "image";
+      srcField: ContentField;
+      altField: ContentField;
+      titleField?: ContentField;
+    }
+  | {
+      kind: "link";
+      hrefField: ContentField;
+      titleField: ContentField;
+      textField?: ContentField;
+    };
 
 interface FieldGroupProps {
   group: FieldGroupType;
@@ -17,6 +34,90 @@ export default function FieldGroup({
   const changedCount = group.fields.filter(
     (f) => f.value !== f.originalValue,
   ).length;
+
+  const renderItems = useMemo(() => {
+    const items: RenderItem[] = [];
+    const consumedIds = new Set<string>();
+
+    // Pre-scan: mark fields that will be consumed by image groups
+    for (const field of group.fields) {
+      if (field.property !== "src" && field.property !== "srcset") continue;
+      if (field.tag !== "img") continue;
+      const altField = group.fields.find(
+        (f) => f.elementId === field.elementId && f.property === "alt",
+      );
+      if (altField) consumedIds.add(altField.id);
+      const titleField = group.fields.find(
+        (f) => f.elementId === field.elementId && f.property === "title",
+      );
+      if (titleField) consumedIds.add(titleField.id);
+    }
+
+    // Pre-scan: mark fields that will be consumed by link groups
+    for (const field of group.fields) {
+      if (field.property !== "href" || field.tag !== "a") continue;
+      const titleField = group.fields.find(
+        (f) => f.elementId === field.elementId && f.property === "title",
+      );
+      if (!titleField) continue;
+      consumedIds.add(titleField.id);
+      const textField = group.fields.find(
+        (f) => f.elementId === field.elementId && f.property === "textContent",
+      );
+      if (textField) consumedIds.add(textField.id);
+    }
+
+    for (const field of group.fields) {
+      if (consumedIds.has(field.id)) continue;
+
+      // Image group: src/srcset + alt (+ optional title)
+      if (
+        (field.property === "src" || field.property === "srcset") &&
+        field.tag === "img"
+      ) {
+        const altField = group.fields.find(
+          (f) => f.elementId === field.elementId && f.property === "alt",
+        );
+        if (altField) {
+          const titleField = group.fields.find(
+            (f) => f.elementId === field.elementId && f.property === "title",
+          );
+          items.push({
+            kind: "image",
+            srcField: field,
+            altField,
+            titleField,
+          });
+          continue;
+        }
+      }
+
+      // Link group: href + title (+ optional textContent)
+      if (field.property === "href" && field.tag === "a") {
+        const titleField = group.fields.find(
+          (f) => f.elementId === field.elementId && f.property === "title",
+        );
+        if (titleField) {
+          const textField = group.fields.find(
+            (f) =>
+              f.elementId === field.elementId &&
+              f.property === "textContent",
+          );
+          items.push({
+            kind: "link",
+            hrefField: field,
+            titleField,
+            textField,
+          });
+          continue;
+        }
+      }
+
+      items.push({ kind: "field", field });
+    }
+
+    return items;
+  }, [group.fields]);
 
   return (
     <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
@@ -65,9 +166,37 @@ export default function FieldGroup({
           id={`group-content-${group.id}`}
           className="space-y-4 border-t border-gray-100 px-4 py-4 animate-fade-in"
         >
-          {group.fields.map((field) => (
-            <EditableField key={field.id} field={field} onChange={onChange} />
-          ))}
+          {renderItems.map((item) => {
+            if (item.kind === "image") {
+              return (
+                <ImageFieldGroup
+                  key={item.srcField.id}
+                  srcField={item.srcField}
+                  altField={item.altField}
+                  titleField={item.titleField}
+                  onChange={onChange}
+                />
+              );
+            }
+            if (item.kind === "link") {
+              return (
+                <LinkFieldGroup
+                  key={item.hrefField.id}
+                  hrefField={item.hrefField}
+                  titleField={item.titleField}
+                  textField={item.textField}
+                  onChange={onChange}
+                />
+              );
+            }
+            return (
+              <EditableField
+                key={item.field.id}
+                field={item.field}
+                onChange={onChange}
+              />
+            );
+          })}
         </div>
       )}
     </div>

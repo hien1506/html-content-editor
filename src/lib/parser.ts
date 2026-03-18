@@ -68,6 +68,12 @@ function getFieldLabel(tag: string, property: string): string {
   if (property === "srcset")
     return tag.toLowerCase() === "source" ? "Source URL" : "Image URL";
   if (property === "alt") return "Image Alt Text";
+  if (property === "title") {
+    const t = tag.toLowerCase();
+    if (t === "img") return "Image Title";
+    if (t === "a") return "Link Title";
+    return "Title";
+  }
 
   switch (tag.toLowerCase()) {
     case "h1":
@@ -182,8 +188,8 @@ export function parseHtml(html: string): ParseResult {
             const srcset = child.getAttribute("srcset");
             if (srcset) addField(child, "srcset", srcset);
           }
-          const alt = child.getAttribute("alt");
-          if (alt !== null) addField(child, "alt", alt);
+          addField(child, "alt", child.getAttribute("alt") ?? "");
+          addField(child, "title", child.getAttribute("title") ?? "");
         }
       }
       return;
@@ -197,8 +203,8 @@ export function parseHtml(html: string): ParseResult {
         const srcset = element.getAttribute("srcset");
         if (srcset) addField(element, "srcset", srcset);
       }
-      const alt = element.getAttribute("alt");
-      if (alt !== null) addField(element, "alt", alt);
+      addField(element, "alt", element.getAttribute("alt") ?? "");
+      addField(element, "title", element.getAttribute("title") ?? "");
       return;
     }
 
@@ -211,6 +217,8 @@ export function parseHtml(html: string): ParseResult {
     if (tag === "A") {
       const href = element.getAttribute("href");
       if (href) addField(element, "href", href);
+      const linkTitle = element.getAttribute("title");
+      if (linkTitle !== null) addField(element, "title", linkTitle);
 
       const hasBlockChild = Array.from(element.children).some((c) =>
         BLOCK_TAGS.has(c.tagName),
