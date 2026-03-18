@@ -244,7 +244,7 @@ export function parseHtml(html: string): ParseResult {
       return;
     }
 
-    if (tag === "SPAN" || tag === "BUTTON") {
+    if (tag === "SPAN" || tag === "BUTTON" || tag === "DIV") {
       const hasBlockChild = Array.from(element.children).some((c) =>
         BLOCK_TAGS.has(c.tagName),
       );
