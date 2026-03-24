@@ -220,11 +220,14 @@ export function parseHtml(html: string): ParseResult {
       const linkTitle = element.getAttribute("title");
       if (linkTitle !== null) addField(element, "title", linkTitle);
 
-      const hasBlockChild = Array.from(element.children).some((c) =>
-        BLOCK_TAGS.has(c.tagName),
+      const hasComplexChild = Array.from(element.children).some(
+        (c) =>
+          BLOCK_TAGS.has(c.tagName) ||
+          c.tagName === "IMG" ||
+          c.tagName === "PICTURE",
       );
 
-      if (!hasBlockChild) {
+      if (!hasComplexChild) {
         const text = element.textContent?.trim();
         if (text) {
           addField(element, "textContent", text);
@@ -245,11 +248,15 @@ export function parseHtml(html: string): ParseResult {
     }
 
     if (tag === "SPAN" || tag === "BUTTON" || tag === "DIV") {
-      const hasBlockChild = Array.from(element.children).some((c) =>
-        BLOCK_TAGS.has(c.tagName),
+      const hasComplexChild = Array.from(element.children).some(
+        (c) =>
+          BLOCK_TAGS.has(c.tagName) ||
+          c.tagName === "A" ||
+          c.tagName === "IMG" ||
+          c.tagName === "PICTURE",
       );
       const text = element.textContent?.trim();
-      if (!hasBlockChild && text) {
+      if (!hasComplexChild && text) {
         addField(element, "textContent", text);
         return;
       }
